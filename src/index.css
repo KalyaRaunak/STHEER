@@ -84,3 +84,98 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-brand-yellow);
 }
+
+/* ─── Global Card Base ─── */
+[class*="card"],
+[class*="-card"] {
+  transition:
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    transform 250ms ease;
+}
+
+/* ─── Yellow border glow on all card hovers ─── */
+[class*="card"]:hover {
+  border-color: rgba(255, 215, 0, 0.28);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 215, 0, 0.06);
+}
+
+/* ─── Category / tag pills ─── */
+.category-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 2px;
+  color: #FFD700;
+  font-size: 0.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 200ms ease;
+}
+
+.category-tag:hover {
+  background-color: rgba(255, 215, 0, 0.08);
+}
+
+/* ─── Explore / view links ─── */
+.card-link {
+  color: #FFD700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 200ms ease, opacity 200ms ease;
+}
+
+.card-link:hover {
+  gap: 10px;
+  opacity: 0.85;
+}
+
+/* ─── Grayscale image treatment (Team cards) ─── */
+.team-img {
+  filter: grayscale(100%);
+  transition: filter 400ms ease, transform 400ms ease;
+}
+
+.team-card:hover .team-img {
+  filter: grayscale(0%);
+  transform: scale(1.04);
+}
+
+/* ─── Portfolio overlay ─── */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 15, 15, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  color: #FFD700;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.portfolio-card:hover .card-overlay {
+  opacity: 1;
+}
+
+/* ─── Growth Step Cards ─── */
+.step-card {
+  transition: border-color 300ms ease;
+  border-top: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.step-card:hover {
+  border-top-color: #FFD700;
+}
+
+

@@ -67,3 +67,74 @@ export const scaleUp = {
 
 // Viewport settings — use on every motion.div wrapper
 export const viewport = { once: true, amount: 0.15 };
+
+// Card entrance — primary variant used on all cards
+export const cardEntrance = {
+  hidden: {
+    opacity: 0,
+    y: 32,
+    scale: 0.97
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.55,
+      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number]
+    }
+  }
+};
+
+// Card entrance — horizontal (for value cards / step cards in a row)
+export const cardEntranceLeft = {
+  hidden: { opacity: 0, x: -24, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }
+  }
+};
+
+// Card entrance — for portfolio cards (scale only, no Y shift)
+export const cardEntranceScale = {
+  hidden: { opacity: 0, scale: 0.94 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }
+  }
+};
+
+// Stagger wrappers
+export const cardGrid = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.05
+    }
+  }
+};
+
+export const cardGridFast = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.07,
+      delayChildren: 0.0
+    }
+  }
+};
+
+export const cardRow = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1
+    }
+  }
+};
+

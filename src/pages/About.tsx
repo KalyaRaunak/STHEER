@@ -2,9 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Eye, Heart, Link2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
 import { SectionLabel } from '../components/ui/SectionLabel';
-import { fadeUp, fadeIn, staggerContainer, slideInLeft, scaleUp, viewport } from '../lib/animations';
+import { fadeUp, fadeIn, staggerContainer, slideInLeft, viewport, cardEntrance, cardEntranceLeft, cardGrid, cardRow } from '../lib/animations';
 
 export const About: React.FC = () => {
   const teamMembers = [
@@ -173,7 +172,7 @@ export const About: React.FC = () => {
 
           {/* staggerContainer + scaleUp variant */}
           <motion.div
-            variants={staggerContainer}
+            variants={cardRow}
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
@@ -181,42 +180,79 @@ export const About: React.FC = () => {
           >
             {[
               {
-                icon: <Shield className="w-6 h-6 text-brand-yellow mb-6" />,
+                icon: <Shield className="w-6 h-6" />,
                 title: 'Systems Over Shortcuts',
                 desc: 'We do not believe in quick fixes. We believe in building infrastructure that works independently of trend cycles, algorithm changes, and platform shifts.'
               },
               {
-                icon: <Eye className="w-6 h-6 text-brand-yellow mb-6" />,
+                icon: <Eye className="w-6 h-6" />,
                 title: 'Transparency Without Jargon',
                 desc: 'We communicate clearly, report honestly, and never hide behind vanity metrics. You will always know what we are doing, why we are doing it, and what it is producing.'
               },
               {
-                icon: <Heart className="w-6 h-6 text-brand-yellow mb-6" />,
+                icon: <Heart className="w-6 h-6" />,
                 title: 'Growth With Integrity',
                 desc: 'We only take on clients we genuinely believe we can help. If your business is not the right fit, we will tell you — and point you in the right direction.'
               },
               {
-                icon: <Link2 className="w-6 h-6 text-brand-yellow mb-6" />,
+                icon: <Link2 className="w-6 h-6" />,
                 title: 'Connected Thinking',
                 desc: 'We see your business as a whole system, not a collection of isolated channels. Every decision we make considers how it connects to everything else.'
               }
-            ].map((value, idx) => (
-              <motion.div
-                key={idx}
-                variants={scaleUp}
-                className="h-full"
-              >
-                <Card className="flex flex-col text-left items-start h-full" hoverEffect={true}>
-                  {value.icon}
+            ].map((value, idx) => {
+              const valueCardVariants = {
+                hidden: cardEntranceLeft.hidden,
+                visible: cardEntranceLeft.visible,
+                hover: {
+                  y: -4,
+                  transition: { duration: 0.22, ease: 'easeOut' as const }
+                }
+              };
+
+              return (
+                <motion.div
+                  key={idx}
+                  variants={valueCardVariants}
+                  whileHover="hover"
+                  className="bg-brand-surface border border-brand-border rounded-[4px] p-8 flex flex-col text-left items-start h-full cursor-default value-card relative overflow-hidden"
+                >
+                  {/* Icon container — subtle background fills on hover */}
+                  <motion.div
+                    className="icon-container"
+                    variants={{
+                      hover: {
+                        backgroundColor: 'rgba(255, 215, 0, 0.12)',
+                        transition: { duration: 0.25 }
+                      }
+                    }}
+                    style={{
+                      padding: '12px',
+                      borderRadius: '4px',
+                      backgroundColor: 'rgba(255, 215, 0, 0.06)',
+                      display: 'inline-flex',
+                      marginBottom: '16px'
+                    }}
+                  >
+                    <motion.div
+                      variants={{
+                        hover: { scale: 1.15 }
+                      }}
+                      transition={{ duration: 0.2, ease: 'easeOut' }}
+                      className="text-brand-yellow"
+                    >
+                      {value.icon}
+                    </motion.div>
+                  </motion.div>
+
                   <h3 className="font-dm-sans font-semibold text-lg text-brand-white mb-3">
                     {value.title}
                   </h3>
                   <p className="font-dm-sans text-sm text-brand-muted leading-relaxed">
                     {value.desc}
                   </p>
-                </Card>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
@@ -242,52 +278,84 @@ export const About: React.FC = () => {
             </motion.div>
             
             <motion.div
-              variants={staggerContainer}
+              variants={cardGrid}
               initial="hidden"
               whileInView="visible"
               viewport={viewport}
               className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6"
             >
-              {teamMembers.map((member, idx) => (
-                <motion.div
-                  key={idx}
-                  variants={fadeUp}
-                  className="bg-brand-black border border-brand-border p-6 rounded-[4px] flex flex-col text-left group"
-                >
-                  {/* Portrait Container with Grayscale-to-Color transition */}
-                  <motion.div
-                    variants={scaleUp}
-                    className="aspect-square w-full bg-brand-surface-2 border border-brand-border rounded-[4px] mb-6 overflow-hidden relative"
-                  >
-                    <img
-                      src={member.imgUrl}
-                      alt={member.name}
-                      loading="lazy"
-                      decoding="async"
-                      width={400}
-                      height={400}
-                      className="w-full h-full object-cover grayscale transition-all duration-400 group-hover:grayscale-0 group-hover:scale-104"
-                    />
-                  </motion.div>
+              {teamMembers.map((member, idx) => {
+                const teamCardVariants = {
+                  hidden: cardEntrance.hidden,
+                  visible: cardEntrance.visible,
+                  hover: {
+                    y: -5,
+                    transition: { duration: 0.22, ease: 'easeOut' as const }
+                  }
+                };
 
-                  <h3 className="font-montserrat font-bold text-lg text-brand-white mb-1 group-hover:text-brand-yellow transition-colors">
-                    {member.name}
-                  </h3>
-                  <div className="font-dm-sans font-medium text-sm text-brand-yellow mb-3">
-                    {member.role}
-                  </div>
-                  <p className="font-dm-sans text-xs text-brand-muted leading-relaxed mb-4">
-                    {member.bio}
-                  </p>
-                  
-                  {/* Transparent placeholder disclaimer badge */}
-                  <div className="mt-auto pt-2 border-t border-brand-border/30">
-                    <span className="font-dm-sans text-[11px] text-brand-muted/70 italic">
-                      [Placeholder — Real Photo Coming Soon]
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
+                return (
+                  <motion.div
+                    key={idx}
+                    variants={teamCardVariants}
+                    whileHover="hover"
+                    className="bg-brand-black border border-brand-border p-6 rounded-[4px] flex flex-col text-left group team-card"
+                  >
+                    {/* Portrait Container with Grayscale-to-Color transition */}
+                    <div className="aspect-square w-full bg-brand-surface-2 border border-brand-border rounded-[4px] mb-6 overflow-hidden relative">
+                      <motion.img
+                        src={member.imgUrl}
+                        alt={member.name}
+                        loading="lazy"
+                        decoding="async"
+                        width={400}
+                        height={400}
+                        style={{
+                          width: '100%',
+                          aspectRatio: '1/1',
+                          objectFit: 'cover',
+                          filter: 'grayscale(100%)'
+                        }}
+                        variants={{
+                          hover: {
+                            scale: 1.04,
+                            filter: 'grayscale(0%)'
+                          }
+                        }}
+                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                        className="team-img"
+                      />
+                    </div>
+
+                    <h3 className="font-montserrat font-bold text-lg text-brand-white mb-1 group-hover:text-brand-yellow transition-colors">
+                      {member.name}
+                    </h3>
+                    
+                    <motion.div
+                      style={{ color: '#FFD700', fontSize: '0.875rem', fontWeight: 500 }}
+                      className="font-dm-sans mb-3"
+                      initial={{ opacity: 0.7 }}
+                      variants={{
+                        hover: { opacity: 1 }
+                      }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {member.role}
+                    </motion.div>
+                    
+                    <p className="font-dm-sans text-xs text-brand-muted leading-relaxed mb-4">
+                      {member.bio}
+                    </p>
+                    
+                    {/* Transparent placeholder disclaimer badge */}
+                    <div className="mt-auto pt-2 border-t border-brand-border/30">
+                      <span className="font-dm-sans text-[11px] text-brand-muted/70 italic">
+                        [Placeholder — Real Photo Coming Soon]
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </div>
 

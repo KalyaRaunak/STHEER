@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown, Globe, TrendingUp, Layers, Pen, CheckCircle, Database, Cpu, ChevronUp } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { SectionLabel } from '../components/ui/SectionLabel';
-import { fadeUp, fadeIn, slideInLeft, slideInRight, viewport } from '../lib/animations';
+import { fadeUp, fadeIn, slideInLeft, slideInRight, viewport, cardEntrance, cardGrid } from '../lib/animations';
 
 export const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState('web');
@@ -208,7 +208,14 @@ export const Services: React.FC = () => {
               </h3>
               
               {/* Deliverables list with yellow lines */}
-              <ul className="flex flex-col gap-3 mb-6">
+              <motion.ul
+                variants={cardGrid}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewport}
+                className="flex flex-col gap-3 mb-6"
+                style={{ listStyle: 'none', padding: 0 }}
+              >
                 {[
                   'High-converting landing pages and campaign microsites',
                   'Full business websites and e-commerce platforms',
@@ -216,12 +223,29 @@ export const Services: React.FC = () => {
                   'Internal dashboards and business intelligence tools',
                   'Website audits and performance optimisation',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-4 font-dm-sans text-brand-off-white text-sm">
-                    <span className="w-4 h-[1px] bg-brand-yellow mt-[9px] shrink-0" />
+                  <motion.li
+                    key={idx}
+                    variants={cardEntrance}
+                    whileHover={{ x: 6 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className="flex items-center gap-4 font-dm-sans text-brand-off-white text-sm cursor-default"
+                    style={{
+                      borderBottom: '1px solid rgba(255,255,255,0.06)',
+                      padding: '12px 0',
+                      transition: 'color 200ms ease'
+                    }}
+                  >
+                    <motion.span
+                      style={{ color: '#FFD700', fontSize: '1.25rem', lineHeight: 1, display: 'inline-block' }}
+                      whileHover={{ scaleX: 1.5 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      —
+                    </motion.span>
                     <span>{item}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
 
               {/* Accordion sub-services */}
               <h4 className="font-montserrat font-bold text-xs text-brand-white uppercase tracking-wider mb-3">
@@ -327,7 +351,14 @@ export const Services: React.FC = () => {
               <h3 className="font-montserrat font-bold text-sm text-brand-white uppercase tracking-wider mb-4">
                 Core Deliverables
               </h3>
-              <ul className="flex flex-col gap-3 mb-8">
+              <motion.ul
+                variants={cardGrid}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewport}
+                className="flex flex-col gap-3 mb-8"
+                style={{ listStyle: 'none', padding: 0 }}
+              >
                 {[
                   'Meta (Facebook & Instagram) and Google paid advertising',
                   'Conversion-focused ad creative and copywriting',
@@ -336,12 +367,29 @@ export const Services: React.FC = () => {
                   'Analytics setup, dashboards, and monthly reporting',
                   'A/B testing and continuous optimisation',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-4 font-dm-sans text-brand-off-white text-sm">
-                    <span className="w-4 h-[1px] bg-brand-yellow mt-[9px] shrink-0" />
+                  <motion.li
+                    key={idx}
+                    variants={cardEntrance}
+                    whileHover={{ x: 6 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className="flex items-center gap-4 font-dm-sans text-brand-off-white text-sm cursor-default"
+                    style={{
+                      borderBottom: '1px solid rgba(255,255,255,0.06)',
+                      padding: '12px 0',
+                      transition: 'color 200ms ease'
+                    }}
+                  >
+                    <motion.span
+                      style={{ color: '#FFD700', fontSize: '1.25rem', lineHeight: 1, display: 'inline-block' }}
+                      whileHover={{ scaleX: 1.5 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      —
+                    </motion.span>
                     <span>{item}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </div>
             
             <div>
@@ -389,7 +437,14 @@ export const Services: React.FC = () => {
               <h3 className="font-montserrat font-bold text-sm text-brand-white uppercase tracking-wider mb-4">
                 Core Deliverables
               </h3>
-              <ul className="flex flex-col gap-3 mb-8">
+              <motion.ul
+                variants={cardGrid}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewport}
+                className="flex flex-col gap-3 mb-8"
+                style={{ listStyle: 'none', padding: 0 }}
+              >
                 {[
                   'Monthly content strategy and calendar planning',
                   'Original content creation — photography direction, graphic design, copy',
@@ -397,12 +452,29 @@ export const Services: React.FC = () => {
                   'Community engagement and response management',
                   'Monthly analytics reporting and strategy review',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-4 font-dm-sans text-brand-off-white text-sm">
-                    <span className="w-4 h-[1px] bg-brand-yellow mt-[9px] shrink-0" />
+                  <motion.li
+                    key={idx}
+                    variants={cardEntrance}
+                    whileHover={{ x: 6 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className="flex items-center gap-4 font-dm-sans text-brand-off-white text-sm cursor-default"
+                    style={{
+                      borderBottom: '1px solid rgba(255,255,255,0.06)',
+                      padding: '12px 0',
+                      transition: 'color 200ms ease'
+                    }}
+                  >
+                    <motion.span
+                      style={{ color: '#FFD700', fontSize: '1.25rem', lineHeight: 1, display: 'inline-block' }}
+                      whileHover={{ scaleX: 1.5 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      —
+                    </motion.span>
                     <span>{item}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </div>
             
             <div>
@@ -492,7 +564,14 @@ export const Services: React.FC = () => {
               <h3 className="font-montserrat font-bold text-sm text-brand-white uppercase tracking-wider mb-4">
                 Core Deliverables
               </h3>
-              <ul className="flex flex-col gap-3 mb-8">
+              <motion.ul
+                variants={cardGrid}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewport}
+                className="flex flex-col gap-3 mb-8"
+                style={{ listStyle: 'none', padding: 0 }}
+              >
                 {[
                   'Brand identity — logo, colour palette, typography, brand guidelines',
                   'Marketing collateral — brochures, presentations, pitch decks',
@@ -501,12 +580,29 @@ export const Services: React.FC = () => {
                   'Brand refresh and visual identity audits',
                   'Standee, flyer, and vinyl design (print production)',
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-4 font-dm-sans text-brand-off-white text-sm">
-                    <span className="w-4 h-[1px] bg-brand-yellow mt-[9px] shrink-0" />
+                  <motion.li
+                    key={idx}
+                    variants={cardEntrance}
+                    whileHover={{ x: 6 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className="flex items-center gap-4 font-dm-sans text-brand-off-white text-sm cursor-default"
+                    style={{
+                      borderBottom: '1px solid rgba(255,255,255,0.06)',
+                      padding: '12px 0',
+                      transition: 'color 200ms ease'
+                    }}
+                  >
+                    <motion.span
+                      style={{ color: '#FFD700', fontSize: '1.25rem', lineHeight: 1, display: 'inline-block' }}
+                      whileHover={{ scaleX: 1.5 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      —
+                    </motion.span>
                     <span>{item}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </div>
             
             <div>

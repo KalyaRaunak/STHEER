@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../components/ui/Button';
 import { SectionLabel } from '../components/ui/SectionLabel';
-import { scaleUp, staggerContainer, fadeIn, fadeUp, viewport } from '../lib/animations';
+import { viewport, cardEntranceScale, cardGrid, fadeIn, fadeUp } from '../lib/animations';
 
 interface Project {
   id: number;
@@ -165,57 +165,81 @@ export const Work: React.FC = () => {
               key={selectedFilter}
               initial="hidden"
               animate="visible"
-              exit="hidden"
-              variants={staggerContainer}
+              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              variants={cardGrid}
               viewport={viewport}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {filteredProjects.map((project) => (
-                <motion.div
-                  layout
-                  key={project.id}
-                  variants={scaleUp}
-                  className="flex flex-col text-left group bg-brand-surface border border-brand-border p-6 rounded-[4px]"
-                >
-                  {/* Image container: overflow-hidden, image zoom scale 1.04 on hover */}
-                  <div className="aspect-[16/9] w-full bg-brand-surface-2 border border-brand-border rounded-[4px] mb-6 overflow-hidden relative">
-                    <img
-                      src={project.imgUrl}
-                      alt={project.imgAlt}
-                      loading="lazy"
-                      decoding="async"
-                      width={700}
-                      height={400}
-                      className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-104"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-black/20 to-transparent pointer-events-none" />
-                  </div>
+              {filteredProjects.map((project) => {
+                const portfolioCardVariants = {
+                  hidden: cardEntranceScale.hidden,
+                  visible: cardEntranceScale.visible,
+                  hover: {
+                    y: -6,
+                    transition: { duration: 0.22, ease: 'easeOut' as const }
+                  }
+                };
 
-                  <div className="mb-4">
-                    <span className="inline-block border border-brand-yellow/30 text-brand-yellow font-dm-sans font-medium text-[10px] uppercase tracking-[0.08em] px-2.5 py-1 rounded-full mb-3">
-                      {project.categoryTag}
-                    </span>
-                    <h3 className="font-dm-sans font-semibold text-lg text-brand-white group-hover:text-brand-yellow transition-colors duration-200">
-                      {project.title}
-                    </h3>
-                  </div>
-
-                  <p className="font-montserrat font-bold text-xs text-brand-yellow uppercase tracking-[0.06em] mb-3">
-                    {project.outcome}
-                  </p>
-
-                  <p className="font-dm-sans text-xs text-brand-muted leading-relaxed mb-6 flex-grow">
-                    {project.desc}
-                  </p>
-
-                  <a
-                    href="/contact"
-                    className="font-dm-sans text-xs font-semibold text-brand-yellow hover:text-brand-gold mt-auto flex items-center gap-1 group-hover:underline underline-offset-4"
+                return (
+                  <motion.div
+                    layout
+                    key={project.id}
+                    variants={portfolioCardVariants}
+                    whileHover="hover"
+                    className="flex flex-col text-left group bg-brand-surface border border-brand-border p-6 rounded-[4px] portfolio-card"
                   >
-                    View Project &rarr;
-                  </a>
-                </motion.div>
-              ))}
+                    {/* Image container: overflow-hidden, image zoom scale 1.06 on hover */}
+                    <div className="aspect-[16/9] w-full bg-brand-surface-2 border border-brand-border rounded-[4px] mb-6 overflow-hidden relative">
+                      <motion.img
+                        src={project.imgUrl}
+                        alt={project.imgAlt}
+                        loading="lazy"
+                        decoding="async"
+                        width={700}
+                        height={400}
+                        className="w-full h-full object-cover"
+                        variants={{
+                          hover: { scale: 1.06 }
+                        }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                      />
+                      
+                      {/* Overlay appears on hover */}
+                      <div className="card-overlay">
+                        <span>View Project &rarr;</span>
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <span className="inline-block border border-brand-yellow/30 text-brand-yellow font-dm-sans font-medium text-[10px] uppercase tracking-[0.08em] px-2.5 py-1 rounded-full mb-3">
+                        {project.categoryTag}
+                      </span>
+                      <h3 className="font-dm-sans font-semibold text-lg text-brand-white group-hover:text-brand-yellow transition-colors duration-200">
+                        {project.title}
+                      </h3>
+                    </div>
+
+                    <p className="font-montserrat font-bold text-xs text-brand-yellow uppercase tracking-[0.06em] mb-3">
+                      {project.outcome}
+                    </p>
+
+                    <p className="font-dm-sans text-xs text-brand-muted leading-relaxed mb-6 flex-grow">
+                      {project.desc}
+                    </p>
+
+                    <motion.a
+                      href="/contact"
+                      className="font-dm-sans text-xs font-semibold text-brand-yellow hover:text-brand-gold mt-auto flex items-center gap-1 group-hover:underline underline-offset-4 card-link"
+                      variants={{
+                        hover: { x: 5 }
+                      }}
+                      transition={{ duration: 0.18 }}
+                    >
+                      View Project &rarr;
+                    </motion.a>
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </AnimatePresence>
         </div>

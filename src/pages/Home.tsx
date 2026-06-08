@@ -2,9 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Globe, TrendingUp, Layers, Pen, ChevronDown } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
 import { SectionLabel } from '../components/ui/SectionLabel';
-import { fadeUp, fadeIn, staggerContainer, slideInLeft, slideInRight, viewport } from '../lib/animations';
+import { fadeUp, fadeIn, staggerContainer, slideInLeft, slideInRight, viewport, cardEntrance, cardRow, cardGrid } from '../lib/animations';
 import { BeamsBackground } from '../components/ui/beams-background';
 
 // Viewport-triggered animated numeric counter
@@ -160,33 +159,54 @@ export const Home: React.FC = () => {
             Trusted by founders, operators, and growth teams across e-commerce, SaaS, real estate, hospitality, and professional services.
           </motion.p>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          <motion.div
+            variants={cardRow}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12"
+          >
             {[
               { value: 3, suffix: '+', label: 'Years Building' },
               { value: 18, suffix: '+', label: 'Businesses Scaled' },
               { value: 9, suffix: '', label: 'Integrated Services' },
               { value: 0, text: 'Your Growth', label: 'One Consistent Goal' },
-            ].map((stat, idx) => (
-              <motion.div
-                key={idx}
-                variants={fadeUp}
-                className="flex flex-col items-center"
-              >
-                <div className="font-montserrat font-extrabold text-[clamp(2rem,4vw,3.5rem)] text-brand-yellow leading-none mb-2 select-none">
-                  {stat.text ? (
-                    <span className="text-[1.75rem] md:text-[2.25rem] lg:text-[2.5rem] tracking-tight text-brand-yellow leading-tight block pt-2">
-                      {stat.text}
-                    </span>
-                  ) : (
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  )}
-                </div>
-                <div className="font-dm-sans font-medium text-xs md:text-[13px] text-brand-muted uppercase tracking-[0.08em]">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+            ].map((stat, idx) => {
+              const statCardVariants = {
+                hidden: cardEntrance.hidden,
+                visible: cardEntrance.visible,
+                hover: {
+                  y: -3,
+                  transition: { duration: 0.18, ease: 'easeOut' as const }
+                }
+              };
+
+              return (
+                <motion.div
+                  key={idx}
+                  variants={statCardVariants}
+                  whileHover="hover"
+                  className="flex flex-col items-center cursor-default"
+                >
+                  <motion.div
+                    variants={{
+                      hover: { scale: 1.06 }
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className="font-montserrat font-extrabold text-[clamp(2rem,4vw,3.5rem)] text-brand-yellow leading-none mb-2 select-none"
+                  >
+                    {stat.text ? (
+                      <span className="text-[1.75rem] md:text-[2.25rem] lg:text-[2.5rem] tracking-tight text-brand-yellow leading-tight block pt-2">
+                        {stat.text}
+                      </span>
+                    ) : (
+                      <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                    )}
+                  </motion.div>
+                  <div className="font-dm-sans font-medium text-xs md:text-[13px] text-brand-muted uppercase tracking-[0.08em]">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </motion.div>
       </section>
 
@@ -207,7 +227,7 @@ export const Home: React.FC = () => {
           </motion.div>
 
           <motion.div
-            variants={staggerContainer}
+            variants={cardGrid}
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
@@ -234,28 +254,65 @@ export const Home: React.FC = () => {
                 title: 'Brand & Design',
                 body: 'Visual identity, print, and marketing design that positions your business professionally online and offline.'
               }
-            ].map((service, i) => (
-              <motion.div
-                key={i}
-                variants={fadeUp}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              >
-                <Card className="flex flex-col items-start text-left h-full" hoverEffect={false}>
-                  <div className="p-3 bg-brand-surface-2 border border-brand-border rounded-[4px] text-brand-yellow mb-6">
+            ].map((service, i) => {
+              const serviceCardVariants = {
+                hidden: cardEntrance.hidden,
+                visible: cardEntrance.visible,
+                hover: {
+                  y: -6,
+                  transition: { duration: 0.25, ease: 'easeOut' as const }
+                }
+              };
+
+              return (
+                <motion.div
+                  key={i}
+                  variants={serviceCardVariants}
+                  whileHover="hover"
+                  className="relative bg-brand-surface border border-brand-border rounded-[4px] p-8 flex flex-col items-start text-left h-full cursor-default overflow-hidden service-card"
+                >
+                  {/* Yellow top border line — animate width on hover */}
+                  <motion.div
+                    className="absolute top-0 left-0 h-[2px] bg-brand-yellow"
+                    initial={{ width: '0%' }}
+                    variants={{
+                      hover: { width: '100%' }
+                    }}
+                    transition={{ duration: 0.35, ease: 'easeOut' }}
+                  />
+
+                  {/* Icon — animate on card hover */}
+                  <motion.div
+                    variants={{
+                      hover: { rotate: 6, scale: 1.1 }
+                    }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    className="p-3 bg-brand-surface-2 border border-brand-border rounded-[4px] text-brand-yellow mb-6"
+                  >
                     {service.icon}
-                  </div>
+                  </motion.div>
+
                   <h3 className="font-montserrat font-bold text-xl text-brand-white mb-3">
                     {service.title}
                   </h3>
                   <p className="font-dm-sans text-[15px] text-brand-off-white/80 leading-relaxed mb-6 flex-grow">
                     {service.body}
                   </p>
-                  <Button to="/services" variant="ghost" className="p-0 text-brand-yellow hover:text-brand-gold self-start text-xs font-bold tracking-[0.08em]">
-                    Explore &rarr;
-                  </Button>
-                </Card>
-              </motion.div>
-            ))}
+
+                  {/* Arrow link — slides right on hover */}
+                  <motion.div
+                    variants={{
+                      hover: { x: 5 }
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Button to="/services" variant="ghost" className="p-0 text-brand-yellow hover:text-brand-gold self-start text-xs font-bold tracking-[0.08em] card-link">
+                      Explore &rarr;
+                    </Button>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
@@ -310,7 +367,7 @@ export const Home: React.FC = () => {
 
           {/* 5-step Horizontal Flow (Desktop) / Vertical Stack (Mobile) */}
           <motion.div
-            variants={staggerContainer}
+            variants={cardRow}
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
@@ -342,27 +399,45 @@ export const Home: React.FC = () => {
                 title: 'Scale',
                 desc: 'We multiply what is working. Once a system proves itself, we expand it across channels, markets, and audiences with precision.',
               },
-            ].map((item, idx) => (
-              <motion.div
-                key={idx}
-                variants={fadeUp}
-                className="relative bg-brand-surface border border-brand-border p-6 rounded-[4px] flex flex-col justify-between h-72 text-left group overflow-hidden"
-              >
-                {/* Background number watermark */}
-                <div className="absolute top-2 right-4 font-montserrat font-extrabold text-[5rem] text-brand-yellow/[0.04] group-hover:text-brand-yellow/[0.08] transition-colors leading-none select-none z-0">
-                  {item.step}
-                </div>
+            ].map((item, idx) => {
+              const stepCardVariants = {
+                hidden: cardEntrance.hidden,
+                visible: cardEntrance.visible,
+                hover: {
+                  y: -4,
+                  transition: { duration: 0.2, ease: 'easeOut' as const }
+                }
+              };
 
-                <div className="z-10 mt-auto">
-                  <h3 className="font-dm-sans font-semibold text-lg text-brand-white mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="font-dm-sans text-sm text-brand-muted leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+              return (
+                <motion.div
+                  key={idx}
+                  variants={stepCardVariants}
+                  whileHover="hover"
+                  className="relative bg-brand-surface border border-brand-border p-6 rounded-[4px] flex flex-col justify-between h-72 text-left group overflow-hidden step-card"
+                >
+                  {/* Background number watermark — moves up slightly on hover */}
+                  <motion.div
+                    variants={{
+                      hover: { y: -6, color: 'rgba(255, 215, 0, 0.14)' }
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute top-2 right-4 font-montserrat font-extrabold text-[5rem] text-brand-yellow/[0.04] transition-colors leading-none select-none z-0 pointer-events-none"
+                  >
+                    {item.step}
+                  </motion.div>
+
+                  <div className="z-10 mt-auto">
+                    <h3 className="font-dm-sans font-semibold text-lg text-brand-white mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="font-dm-sans text-sm text-brand-muted leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           <motion.div
@@ -396,7 +471,7 @@ export const Home: React.FC = () => {
           </motion.div>
 
           <motion.div
-            variants={staggerContainer}
+            variants={cardGrid}
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
@@ -439,53 +514,68 @@ export const Home: React.FC = () => {
                 imgAlt: 'Modern property exterior for real estate listing',
                 desc: 'Property showcase website integrated with CRM and automated lead nurturing.',
               },
-            ].map((item, idx) => (
-              <motion.div
-                key={idx}
-                variants={fadeUp}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="overflow-hidden bg-brand-surface border border-brand-border rounded-[4px] flex flex-col text-left group"
-              >
-                {/* Aspect-ratio image strip */}
-                <div className="relative aspect-[16/7] w-full overflow-hidden bg-brand-surface-2 border-b border-brand-border">
-                  <img
-                    src={item.imgUrl}
-                    alt={item.imgAlt}
-                    loading="lazy"
-                    decoding="async"
-                    width={800}
-                    height={350}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-104"
-                  />
-                  {/* Linear gradient mask overlay */}
-                  <div 
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: 'linear-gradient(to bottom, transparent 40%, rgba(26,26,26,0.98) 100%)'
-                    }}
-                  />
-                </div>
-                
-                <div className="p-8 pt-6 flex flex-col flex-grow justify-between">
-                  <div>
-                    <div className="flex justify-between items-start mb-6">
-                      <span className="font-montserrat font-extrabold text-[clamp(2.5rem,5vw,4.5rem)] text-brand-yellow leading-none select-none">
-                        <AnimatedCounter target={item.metric} suffix={item.suffix} />
-                      </span>
-                      <span className="inline-block border border-brand-yellow/30 text-brand-yellow font-dm-sans font-medium text-[11px] uppercase tracking-[0.08em] px-2.5 py-1 rounded-full">
-                        {item.tag}
-                      </span>
-                    </div>
-                    <h4 className="font-montserrat font-bold text-lg text-brand-white mb-2">
-                      {item.label}
-                    </h4>
-                    <p className="font-dm-sans text-sm text-brand-muted leading-relaxed">
-                      {item.desc}
-                    </p>
+            ].map((item, idx) => {
+              const resultCardVariants = {
+                hidden: cardEntrance.hidden,
+                visible: cardEntrance.visible,
+                hover: {
+                  y: -5,
+                  transition: { duration: 0.2, ease: 'easeOut' as const }
+                }
+              };
+
+              return (
+                <motion.div
+                  key={idx}
+                  variants={resultCardVariants}
+                  whileHover="hover"
+                  className="overflow-hidden bg-brand-surface border border-brand-border rounded-[4px] flex flex-col text-left group result-card"
+                >
+                  {/* Aspect-ratio image strip */}
+                  <div className="relative aspect-[16/7] w-full overflow-hidden bg-brand-surface-2 border-b border-brand-border">
+                    <motion.img
+                      src={item.imgUrl}
+                      alt={item.imgAlt}
+                      loading="lazy"
+                      decoding="async"
+                      width={800}
+                      height={350}
+                      className="w-full h-full object-cover"
+                      variants={{
+                        hover: { scale: 1.05 }
+                      }}
+                      transition={{ duration: 0.5, ease: 'easeOut' }}
+                    />
+                    {/* Linear gradient mask overlay */}
+                    <div 
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background: 'linear-gradient(to bottom, transparent 40%, rgba(26,26,26,0.98) 100%)'
+                      }}
+                    />
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                  
+                  <div className="p-8 pt-6 flex flex-col flex-grow justify-between">
+                    <div>
+                      <div className="flex justify-between items-start mb-6">
+                        <span className="font-montserrat font-extrabold text-[clamp(2.5rem,5vw,4.5rem)] text-brand-yellow leading-none select-none metric">
+                          <AnimatedCounter target={item.metric} suffix={item.suffix} />
+                        </span>
+                        <span className="inline-block border border-brand-yellow/30 text-brand-yellow font-dm-sans font-medium text-[11px] uppercase tracking-[0.08em] px-2.5 py-1 rounded-full">
+                          {item.tag}
+                        </span>
+                      </div>
+                      <h4 className="font-montserrat font-bold text-lg text-brand-white mb-2">
+                        {item.label}
+                      </h4>
+                      <p className="font-dm-sans text-sm text-brand-muted leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
