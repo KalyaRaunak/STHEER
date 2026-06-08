@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../assets/logo.jpg';
 
 interface LogoProps {
   variant?: 'white' | 'yellow' | 'black' | 'current';
@@ -12,31 +12,32 @@ export const Logo: React.FC<LogoProps> = ({
   showText = true,
   className = '',
 }) => {
-  const getFilterStyle = () => {
+  const getTextColorClass = () => {
     switch (variant) {
       case 'yellow':
-        return { filter: 'invert(80%) sepia(70%) saturate(1200%) hue-rotate(350deg) brightness(1.2)' };
-      case 'white':
-        return { filter: 'invert(1) brightness(2)' };
+        return 'text-brand-yellow';
       case 'black':
+        return 'text-brand-black';
+      case 'white':
       default:
-        return {};
+        return 'text-brand-white';
     }
   };
 
   return (
     <div className={`flex items-center gap-3 select-none ${className}`}>
-      {/* Custom Swan Logo Image */}
-      <img
-        src={logoImg}
-        className="w-8 h-8 md:w-9 md:h-9 object-contain rounded-[4px] mix-blend-lighten"
-        style={getFilterStyle()}
-        alt="STHEER Logo"
-      />
+      {/* Swan Icon inside a White Box */}
+      <div className="w-8 h-8 md:w-9 md:h-9 bg-white rounded-[2px] overflow-hidden flex items-center justify-center p-0 shrink-0 shadow-sm border border-white">
+        <img
+          src={logoImg}
+          className="w-full h-full object-cover object-left"
+          alt="STHEER Swan"
+        />
+      </div>
       
       {showText && (
-        <span className="font-montserrat font-extrabold text-lg md:text-xl tracking-[-0.03em] uppercase text-brand-white">
-          Stheer
+        <span className={`font-montserrat font-extrabold text-[17px] md:text-[19px] tracking-[0.03em] uppercase ${getTextColorClass()}`}>
+          STHEER
         </span>
       )}
     </div>
