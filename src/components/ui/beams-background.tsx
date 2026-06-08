@@ -135,7 +135,6 @@ export const BeamsBackground = forwardRef<HTMLDivElement, AnimatedGradientBackgr
             if (!canvas || !ctx) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.filter = "blur(35px)";
 
             const totalBeams = beamsRef.current.length;
             beamsRef.current.forEach((beam, index) => {
@@ -174,7 +173,7 @@ export const BeamsBackground = forwardRef<HTMLDivElement, AnimatedGradientBackgr
             <canvas
                 ref={canvasRef}
                 className="absolute inset-0"
-                style={{ filter: "blur(15px)" }}
+                style={{ filter: "blur(50px)" }}
             />
 
             <motion.div

@@ -52,7 +52,12 @@ export const Services: React.FC = () => {
         if (tab.ref.current) {
           const top = tab.ref.current.offsetTop;
           if (scrollPosition >= top) {
-            setActiveTab(tab.id);
+            setActiveTab((current) => {
+              if (current !== tab.id) {
+                return tab.id;
+              }
+              return current;
+            });
             break;
           }
         }

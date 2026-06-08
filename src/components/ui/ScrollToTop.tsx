@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
 import { getLenis } from '@/lib/lenis'
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false)
+  const { scrollY } = useScroll()
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 500)
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const shouldBeVisible = latest > 500
+    if (shouldBeVisible !== visible) {
+      setVisible(shouldBeVisible)
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  })
 
   const scrollToTop = () => {
     const lenis = getLenis()
