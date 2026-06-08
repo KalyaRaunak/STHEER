@@ -5,6 +5,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { SectionLabel } from '../components/ui/SectionLabel';
 import { fadeUp, fadeIn, staggerContainer, slideInLeft, slideInRight, viewport } from '../lib/animations';
+import { BeamsBackground } from '../components/ui/beams-background';
 
 // Viewport-triggered animated numeric counter
 function AnimatedCounter({ target, suffix = '', prefix = '' }: { target: number; suffix?: string; prefix?: string }) {
@@ -42,9 +43,10 @@ export const Home: React.FC = () => {
   return (
     <div className="flex flex-col w-full overflow-hidden">
       {/* 1.1 Hero Section */}
-      <section
+      <BeamsBackground
         ref={heroRef}
-        className="relative min-h-screen bg-brand-black flex items-center pt-24 pb-16 px-6 md:px-8 noise-overlay"
+        intensity="strong"
+        className="flex items-center pt-24 pb-16 px-6 md:px-8 bg-brand-black/90 noise-overlay"
       >
         <div className="max-w-[1200px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 flex flex-col items-start text-left z-10">
@@ -132,7 +134,7 @@ export const Home: React.FC = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-10">
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
@@ -140,7 +142,7 @@ export const Home: React.FC = () => {
             <ChevronDown className="w-6 h-6 text-brand-muted hover:text-brand-yellow cursor-pointer" />
           </motion.div>
         </div>
-      </section>
+      </BeamsBackground>
 
       {/* 1.2 Social Proof Strip */}
       <section className="bg-brand-surface border-y border-brand-border py-16 px-6 md:px-8">
