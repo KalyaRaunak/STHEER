@@ -2,6 +2,7 @@
 import Lenis from '@studio-freight/lenis'
 
 let lenis: Lenis | null = null
+let rafId: number | null = null
 
 export function initLenis() {
   lenis = new Lenis({
@@ -15,11 +16,13 @@ export function initLenis() {
   })
 
   function raf(time: number) {
-    lenis!.raf(time)
-    requestAnimationFrame(raf)
+    if (lenis) {
+      lenis.raf(time)
+      rafId = requestAnimationFrame(raf)
+    }
   }
 
-  requestAnimationFrame(raf)
+  rafId = requestAnimationFrame(raf)
 
   return lenis
 }
@@ -29,6 +32,10 @@ export function getLenis() {
 }
 
 export function destroyLenis() {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId)
+    rafId = null
+  }
   lenis?.destroy()
   lenis = null
 }
