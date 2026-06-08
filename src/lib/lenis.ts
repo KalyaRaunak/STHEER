@@ -3,6 +3,7 @@ import Lenis from '@studio-freight/lenis'
 
 let lenis: Lenis | null = null
 let rafId: number | null = null
+let resizeObserver: ResizeObserver | null = null
 
 export function initLenis() {
   lenis = new Lenis({
@@ -24,6 +25,14 @@ export function initLenis() {
 
   rafId = requestAnimationFrame(raf)
 
+  // Automatically update Lenis height when React mounts pages or dynamic content changes
+  if (typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(() => {
+      lenis?.resize()
+    })
+    resizeObserver.observe(document.body)
+  }
+
   return lenis
 }
 
@@ -35,6 +44,10 @@ export function destroyLenis() {
   if (rafId !== null) {
     cancelAnimationFrame(rafId)
     rafId = null
+  }
+  if (resizeObserver) {
+    resizeObserver.disconnect()
+    resizeObserver = null
   }
   lenis?.destroy()
   lenis = null
