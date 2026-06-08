@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Clock, Calendar } from 'lucide-react';
+import { Mail, Clock, Calendar, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { SectionLabel } from '../components/ui/SectionLabel';
+import { fadeUp, fadeIn, slideInLeft, slideInRight, viewport } from '../lib/animations';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ export const Contact: React.FC = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
-    }, 1200);
+    }, 1500);
   };
 
   return (
@@ -49,22 +50,48 @@ export const Contact: React.FC = () => {
       {/* 5.1 Page Hero */}
       <section className="min-h-[50vh] bg-brand-black flex items-center pt-28 pb-16 px-6 md:px-8 noise-overlay">
         <div className="max-w-[1200px] w-full mx-auto text-left">
-          <SectionLabel>Get In Touch</SectionLabel>
-          <h1 className="font-montserrat font-extrabold text-[clamp(2.5rem,5vw,4.5rem)] text-brand-white leading-tight tracking-[-0.03em] max-w-[820px] mb-4">
+          <motion.div
+            variants={fadeIn}
+            initial="hidden"
+            animate="visible"
+          >
+            <SectionLabel>Get In Touch</SectionLabel>
+          </motion.div>
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.1 }}
+            className="font-montserrat font-extrabold text-[clamp(2.5rem,5vw,4.5rem)] text-brand-white leading-tight tracking-[-0.03em] max-w-[820px] mb-4"
+          >
             Start Building Your<br />Growth System
-          </h1>
-          <p className="font-dm-sans font-medium text-lg md:text-xl text-brand-yellow max-w-[720px] leading-relaxed">
+          </motion.h1>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.25 }}
+            className="font-dm-sans font-medium text-lg md:text-xl text-brand-yellow max-w-[720px] leading-relaxed"
+          >
             Every STHEER engagement begins with a strategy call. Not a sales pitch. A genuine conversation about your business, where it is now, and what infrastructure it needs to get where you want it to go.
-          </p>
+          </motion.p>
         </div>
       </section>
 
       {/* 5.2 Contact Layout */}
       <section className="bg-brand-black py-20 px-6 md:px-8 border-t border-brand-border">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start"
+        >
           
-          {/* Left Column: Enquiry Form */}
-          <div className="lg:col-span-7 bg-brand-surface border border-brand-border p-8 md:p-10 rounded-[4px] text-left">
+          {/* Left Column: Enquiry Form with slideInLeft */}
+          <motion.div
+            variants={slideInLeft}
+            className="lg:col-span-7 bg-brand-surface border border-brand-border p-8 md:p-10 rounded-[4px] text-left"
+          >
             <h2 className="font-montserrat font-bold text-2xl text-brand-white mb-8">
               Send Us a Message
             </h2>
@@ -194,21 +221,30 @@ export const Contact: React.FC = () => {
                     />
                   </div>
 
-                  <Button
+                  {/* Submit Button Micro-interactions & Spinner Loading State */}
+                  <motion.button
                     type="submit"
-                    variant="primary"
-                    className="w-full text-center"
-                    onClick={() => {}}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.15 }}
+                    disabled={isSubmitting}
+                    className="w-full inline-flex items-center justify-center bg-brand-yellow hover:bg-brand-gold disabled:bg-brand-yellow/50 text-brand-black font-montserrat font-bold text-sm uppercase tracking-[0.08em] py-4 rounded-[2px] transition-colors cursor-pointer"
                   >
+                    {isSubmitting ? (
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    ) : null}
                     {isSubmitting ? 'Sending...' : 'Send Message'}
-                  </Button>
+                  </motion.button>
                 </motion.form>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
 
-          {/* Right Column: Direct Info */}
-          <div className="lg:col-span-5 flex flex-col gap-10 text-left">
+          {/* Right Column: Direct Info with slideInRight */}
+          <motion.div
+            variants={slideInRight}
+            className="lg:col-span-5 flex flex-col gap-8 text-left"
+          >
             
             {/* Book Strategy Call Block */}
             <div className="bg-brand-surface border border-brand-border p-8 rounded-[4px]">
@@ -222,7 +258,6 @@ export const Contact: React.FC = () => {
                 Book a 30-minute strategy call directly in our calendar. No hard sell. No obligation. Just a focused conversation about what your business needs.
               </p>
               
-              {/* Redirect to standard mock calendar link */}
               <Button
                 variant="secondary"
                 to="/contact"
@@ -235,11 +270,8 @@ export const Contact: React.FC = () => {
               </Button>
             </div>
 
-            {/* Divider */}
-            <div className="h-[1px] bg-brand-border w-full" />
-
             {/* Direct Details */}
-            <div className="flex flex-col gap-6 font-dm-sans">
+            <div className="flex flex-col gap-6 font-dm-sans bg-brand-surface border border-brand-border p-8 rounded-[4px]">
               <div className="flex gap-4 items-start">
                 <Mail className="w-5 h-5 text-brand-yellow shrink-0 mt-1" />
                 <div>
@@ -271,8 +303,27 @@ export const Contact: React.FC = () => {
               </div>
             </div>
 
-          </div>
-        </div>
+            {/* Contact Page Visual Block */}
+            <div className="relative w-full aspect-[16/10] rounded-[4px] overflow-hidden bg-brand-surface border border-brand-border">
+              <img
+                src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80"
+                alt="Modern office meeting space in the UK"
+                loading="lazy"
+                decoding="async"
+                width={900}
+                height={600}
+                className="w-full h-full object-cover"
+              />
+              {/* Dark Overlay */}
+              <div className="absolute inset-0 bg-brand-black/55 flex items-center justify-center p-6 text-center">
+                <span className="font-montserrat font-bold text-lg md:text-xl text-brand-white select-none leading-relaxed">
+                  &ldquo;A conversation, not a sales pitch.&rdquo;
+                </span>
+              </div>
+            </div>
+
+          </motion.div>
+        </motion.div>
       </section>
     </div>
   );
