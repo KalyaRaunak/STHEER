@@ -1,37 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import Home from './pages/Home';
-import About from './pages/About';
-import Services from './pages/Services';
-import Work from './pages/Work';
-import Contact from './pages/Contact';
 
-// Scroll to Top on route change
-const ScrollToTop: React.FC = () => {
-  const { pathname } = useLocation();
+// Scroll Reset & Scroll To Top
+import { ScrollReset } from './components/layout/ScrollReset';
+import { ScrollToTop } from './components/ui/ScrollToTop';
+import { PageTransition } from './components/layout/PageTransition';
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+// Lenis library helpers
+import { initLenis, destroyLenis } from './lib/lenis';
 
-  return null;
-};
+// Lazy load all pages — each becomes its own chunk
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Services = lazy(() => import('./pages/Services'));
+const Work = lazy(() => import('./pages/Work'));
+const Contact = lazy(() => import('./pages/Contact'));
 
-// Route wrapper for page fade transitions
-const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// Minimal loading fallback — blank dark screen (avoids flash)
+const PageLoader: React.FC = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="flex flex-col flex-grow w-full"
-    >
-      {children}
-    </motion.div>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#0F0F0F'
+    }} />
   );
 };
 
@@ -44,50 +38,50 @@ const AnimatedRoutes: React.FC = () => {
         <Route
           path="/"
           element={
-            <PageWrapper>
+            <PageTransition>
               <Home />
-            </PageWrapper>
+            </PageTransition>
           }
         />
         <Route
           path="/about"
           element={
-            <PageWrapper>
+            <PageTransition>
               <About />
-            </PageWrapper>
+            </PageTransition>
           }
         />
         <Route
           path="/services"
           element={
-            <PageWrapper>
+            <PageTransition>
               <Services />
-            </PageWrapper>
+            </PageTransition>
           }
         />
         <Route
           path="/work"
           element={
-            <PageWrapper>
+            <PageTransition>
               <Work />
-            </PageWrapper>
+            </PageTransition>
           }
         />
         <Route
           path="/contact"
           element={
-            <PageWrapper>
+            <PageTransition>
               <Contact />
-            </PageWrapper>
+            </PageTransition>
           }
         />
         {/* Fallback route redirecting to Home */}
         <Route
           path="*"
           element={
-            <PageWrapper>
+            <PageTransition>
               <Home />
-            </PageWrapper>
+            </PageTransition>
           }
         />
       </Routes>
@@ -96,14 +90,26 @@ const AnimatedRoutes: React.FC = () => {
 };
 
 export const App: React.FC = () => {
+  useEffect(() => {
+    // Initialise Lenis global smooth scrolling
+    initLenis();
+
+    return () => {
+      destroyLenis();
+    };
+  }, []);
+
   return (
     <Router>
+      <ScrollReset />
       <ScrollToTop />
       <div className="flex flex-col min-h-screen bg-brand-black text-brand-white selection:bg-brand-yellow selection:text-brand-black">
         <Navbar />
         {/* Main Content Area */}
         <main className="flex flex-col flex-grow w-full">
-          <AnimatedRoutes />
+          <Suspense fallback={<PageLoader />}>
+            <AnimatedRoutes />
+          </Suspense>
         </main>
         <Footer />
       </div>

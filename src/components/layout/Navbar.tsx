@@ -2,22 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Logo } from '../ui/Logo';
+import { motion } from 'framer-motion';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      const y = window.scrollY;
+      setScrolled(y > 48);
+
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? (y / docHeight) * 100 : 0);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -139,6 +141,21 @@ export const Navbar: React.FC = () => {
           </Link>
         </div>
       </div>
+      {/* Scroll progress bar — thin yellow line at very top */}
+      <motion.div
+        className="scroll-progress-bar"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          height: '2px',
+          backgroundColor: '#FFD700',
+          zIndex: 101,
+          width: `${scrollProgress}%`,
+          transformOrigin: 'left',
+          transition: 'width 100ms linear'
+        }}
+      />
     </>
   );
 };

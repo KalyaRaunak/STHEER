@@ -73,7 +73,7 @@ export const BeamsBackground = forwardRef<HTMLDivElement, AnimatedGradientBackgr
         };
 
         updateCanvasSize();
-        window.addEventListener("resize", updateCanvasSize);
+        window.addEventListener("resize", updateCanvasSize, { passive: true });
 
         function resetBeam(beam: Beam, index: number, totalBeams: number) {
             if (!canvas) return beam;

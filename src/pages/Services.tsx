@@ -4,6 +4,7 @@ import { ChevronDown, Globe, TrendingUp, Layers, Pen, CheckCircle, Database, Cpu
 import { Button } from '../components/ui/Button';
 import { SectionLabel } from '../components/ui/SectionLabel';
 import { fadeUp, fadeIn, slideInLeft, slideInRight, viewport, cardEntrance, cardGrid } from '../lib/animations';
+import { getLenis } from '../lib/lenis';
 
 export const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState('web');
@@ -23,19 +24,28 @@ export const Services: React.FC = () => {
 
   const handleTabClick = (ref: React.RefObject<HTMLDivElement | null>, id: string) => {
     if (ref.current) {
-      // Offset for header (72px) + sticky tab bar (52px) = 124px
-      const topOffset = ref.current.getBoundingClientRect().top + window.scrollY - 124;
-      window.scrollTo({
-        top: topOffset,
-        behavior: 'smooth',
-      });
+      const lenis = getLenis();
+      // Offset for header (72px) + sticky tab bar (56px) = 128px
+      if (lenis) {
+        lenis.scrollTo(ref.current, {
+          offset: -128,
+          duration: 1.0,
+          easing: (t) => 1 - Math.pow(1 - t, 3)
+        });
+      } else {
+        const topOffset = ref.current.getBoundingClientRect().top + window.scrollY - 128;
+        window.scrollTo({
+          top: topOffset,
+          behavior: 'smooth',
+        });
+      }
       setActiveTab(id);
     }
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 130; // Offset
+      const scrollPosition = window.scrollY + 135; // Offset
 
       for (let i = tabs.length - 1; i >= 0; i--) {
         const tab = tabs[i];
@@ -49,7 +59,7 @@ export const Services: React.FC = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -128,13 +138,28 @@ export const Services: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => handleTabClick(tab.ref, tab.id)}
-              className={`font-dm-sans font-medium text-sm md:text-base transition-colors pb-1 border-b-2 relative focus:outline-none ${
+              className={`font-dm-sans font-medium text-sm md:text-base transition-colors pb-2 relative focus:outline-none ${
                 activeTab === tab.id
-                  ? 'text-brand-yellow border-brand-yellow'
-                  : 'text-brand-white/70 border-transparent hover:text-brand-yellow'
+                  ? 'text-brand-yellow'
+                  : 'text-brand-white/70 hover:text-brand-yellow'
               }`}
             >
               {tab.name}
+
+              {/* Active indicator line */}
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  backgroundColor: '#FFD700'
+                }}
+                initial={false}
+                animate={{ scaleX: activeTab === tab.id ? 1 : 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+              />
             </button>
           ))}
         </div>
